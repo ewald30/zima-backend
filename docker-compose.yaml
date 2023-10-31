@@ -1,0 +1,12 @@
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    networks:
+      - bridge_network
+
+networks:
+  bridge_network:
+    driver: bridge
