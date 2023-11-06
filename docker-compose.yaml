@@ -2,8 +2,35 @@ services:
   backend:
     build:
       context: .
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5432/${POSTGRES_DB}
     ports:
       - "3000:3000"
+    networks:
+      - bridge_network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}docker
+      POSTGRES_DB: ${POSTGRES_DB} 
+    ports:
+      - 5432:5432
+    networks:
+      - bridge_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "8080:80" # Exposes pgAdmin on http://localhost:80 of the host
+    depends_on:
+      - postgres
     networks:
       - bridge_network
 
